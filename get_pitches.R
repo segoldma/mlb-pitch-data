@@ -1,4 +1,5 @@
 library(dplyr)
+library(ggplot2)
 
 ## Load in all team files
 df1 <- read.csv("ARI.csv")
@@ -37,3 +38,10 @@ pitch_data <- rbind(df1, df2, df3, df4, df5, df6, df7, df8, df9, df10, df11, df1
 pitch_data_2 <- rbind(df16, df17, df18, df19, df20, df21, df22, df23, df24, df25, df26, df27, df28, df29, df30)
 
 pitch_data <-rbind(pitch_data, pitch_data_2)
+
+# Add player ids to add team key
+
+player_ids <- read.csv("player_ids.csv")
+
+pitch_data <- left_join(pitch_data, player_ids, by = c("pitcher" = "mlb_id"))
+
