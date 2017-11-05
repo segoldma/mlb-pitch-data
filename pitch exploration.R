@@ -49,3 +49,33 @@ pitch_data %>%
         panel.grid.minor.x = element_blank(),
         panel.grid.major.y = element_line(colour="grey60", linetype="dashed")) 
 
+pitch_data %>%
+  group_by(mlb_team) %>%
+  summarize("avg_curve" = mean(release_speed)) %>%
+  ggplot(aes(x = avg_curve, y = reorder(mlb_team, avg_curve))) +
+  geom_point(size=3) + 
+  theme_light() +
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.y = element_line(colour="grey60", linetype="dashed")) +
+  ggtitle("Average Curveball Velo by Team")
+
+## Avg velo of four pitch types
+
+pitch_data %>%
+  filter(pitch_type %in% c("CU", "FF", "SL", "CH")) %>%
+  group_by(mlb_team, pitch_type) %>%
+  summarize("avg_velo" = mean(release_speed)) %>%
+  ggplot(aes(x = avg_velo, y = mlb_team, col = pitch_type)) +
+  geom_point(size=3) + 
+  theme_light() +
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.y = element_line(colour="grey60", linetype="dashed")) +
+  ggtitle("Average velo of four pitch types")
+  
+  
+team_pitch_avg <- pitch_data %>%
+  filter(pitch_type %in% c("CU", "FF", "SL", "CH")) %>%
+group_by(mlb_team, pitch_type) %>%
+  summarize("avg_velo" = mean(release_speed))
