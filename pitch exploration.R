@@ -79,3 +79,4 @@ team_pitch_avg <- pitch_data %>%
   filter(pitch_type %in% c("CU", "FF", "SL", "CH")) %>%
 group_by(mlb_team, pitch_type) %>%
   summarize("avg_velo" = mean(release_speed))
+
