@@ -4,15 +4,50 @@ library(ggthemes)
 
 pitch_data %>%
   group_by(mlb_team) %>%
-  summarize("rel_spd" = mean(release_speed)) %>%
-  arrange(desc(rel_spd))
+  summarize("Release Speed" = mean(release_speed)) %>%
+  arrange(desc(`Release Speed`)) %>%
+  mutate("rank" = rank(-`Release Speed`))
+
+# Avg fastball velocity by team
+
+pitch_data %>%
+  filter(pitch_type %in% c("FF","FT", "SI")) %>%
+  group_by(mlb_team) %>%
+  summarize("Release Speed" = mean(release_speed)) %>%
+  arrange(desc(`Release Speed`)) %>%
+    mutate("fastball rank" = rank(-`Release Speed`)) 
+
 
 # Avg velocity by pitch type
 
 pitch_data %>%
   group_by(pitch_type) %>%
-  summarize("rel_spd" = mean(release_speed)) %>%
-  arrange(desc(rel_spd))
+  summarize("Release Speed" = mean(release_speed)) %>%
+  arrange(desc(`Release Speed`))
+
+pitch_data %>%
+  group_by(pitch_type) %>%
+  summarize("Release Speed" = mean(release_speed)) %>%
+  arrange(desc(`Release Speed`)) %>%
+  mutate(pitch_type = recode(pitch_type,
+                             FF = "Four-Seam Fastball",
+                             FT = "Two-Seam Faseball",
+                             SI = "Sinker",
+                             FC = "Cutter",
+                             PO = "Pitchout",
+                             FO = "Forkball",
+                             null = "Null",
+                             FS = "Splitter",
+                             SL = "Slider",
+                             CH = "Changeup",
+                             KC = "Knuckle-Curve",
+                             SC = "Screwball",
+                             CU = "Curveball",
+                             IN = "Intentional Ball",
+                             KN = "Knuckleball",
+                             AB = "Automatic Ball",
+                             EP = "Eephus",
+                             UN = "Unknown"))
 
 
 # Avg fastball velocity by team
@@ -36,7 +71,9 @@ pitch_data %>%
   theme_bw() +
   theme(panel.grid.major.x = element_blank(),
         panel.grid.minor.x = element_blank(),
-        panel.grid.major.y = element_line(colour="grey60", linetype="dashed")) 
+        panel.grid.major.y = element_line(colour="grey60", linetype="dashed")) +
+  xlab("Average Fastball Velocity") +
+  ylab("Team")
 
 ## Curve
 
@@ -82,7 +119,7 @@ pitch_data %>%
 
 ## Avg Fastball Velocity by Inning
 pitch_data %>%
-  filter(pitch_type %in% c("FF", "FT", "FI")) %>%
+  filter(pitch_type %in% c("FF", "FT", "SI")) %>%
   group_by(inning) %>%
   summarize("Average Velocity (mph)" = mean(release_speed)) %>%
   ggplot(aes(x = inning, y = `Average Velocity (mph)`)) +
@@ -90,8 +127,9 @@ pitch_data %>%
   theme_light() +
   theme(panel.grid.major.y = element_line(colour="grey60", linetype="dashed")) +
   scale_x_continuous(breaks = 1:12, limits = c(1,12)) +
-  scale_y_continuous(breaks = 91:97) +
-  ggtitle("Average Fastball velo by inning")
+  scale_y_continuous(breaks = 91:97, limits = c(92,95)) +
+  ggtitle("Average Fastball velo by inning") +
+  xlab("Inning")
   
 ## Avg Curveball velo by inning
 pitch_data %>%
