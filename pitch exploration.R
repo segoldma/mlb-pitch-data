@@ -73,7 +73,19 @@ pitch_data %>%
         panel.grid.minor.x = element_blank(),
         panel.grid.major.y = element_line(colour="grey60", linetype="dashed")) +
   ggtitle("Average velo of four pitch types")
-  
+
+
+## Avg Fastball Velocity by Inning
+pitch_data %>%
+  filter(pitch_type %in% c("FF", "FT", "FI")) %>%
+  group_by(inning) %>%
+  summarize("avg_velo" = mean(release_speed)) %>%
+  ggplot(aes(x = inning, y = avg_velo)) +
+  geom_point(size=3) + 
+  theme_light() +
+  theme(panel.grid.major.y = element_line(colour="grey60", linetype="dashed")) +
+  xlim(0,15) +
+  ggtitle("Average Fastball velo by inning")
   
 team_pitch_avg <- pitch_data %>%
   filter(pitch_type %in% c("CU", "FF", "SL", "CH")) %>%
