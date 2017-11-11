@@ -39,6 +39,9 @@ pitch_data_2 <- rbind(df16, df17, df18, df19, df20, df21, df22, df23, df24, df25
 
 pitch_data <-rbind(pitch_data, pitch_data_2)
 
+## IF DF IS ALREADY CREATED
+pitch_data <- read.csv("pitch_data.csv")
+
 # Add player ids to add team key
 
 player_ids <- read.csv("player_ids.csv")
