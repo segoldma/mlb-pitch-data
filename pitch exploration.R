@@ -126,4 +126,33 @@ team_pitch_avg <- pitch_data %>%
   group_by(mlb_team, pitch_type) %>%
   summarize("avg_velo" = mean(release_speed))
 
+## How many eephuses?
+pitch_data %>%
+  filter(pitch_type == "EP") %>%
+  tally()
+
+## Who threw all the Eephuses?
+pitch_data %>%
+  filter(pitch_type == "EP") %>%
+  group_by(player_name) %>%
+  tally() %>%
+  arrange(desc(n))
+
+## Eephus Balls/Strikes
+pitch_data %>%
+  filter(pitch_type == "EP") %>%
+  group_by(type) %>%
+  tally() %>%
+  arrange(desc(n))
+
+## Eephus outcomes
+pitch_data %>%
+  filter(pitch_type == "EP") %>%
+  group_by(description) %>%
+  tally() %>%
+  arrange(desc(n))
+
+  ## Shields Eephus: https://chicago.suntimes.com/sports/slower-is-better-for-the-reinvented-james-shields/
+
+
 
