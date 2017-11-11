@@ -1,3 +1,5 @@
+library(ggthemes)
+
 # Avg velocity by team
 
 pitch_data %>%
@@ -72,7 +74,10 @@ pitch_data %>%
   theme(panel.grid.major.x = element_blank(),
         panel.grid.minor.x = element_blank(),
         panel.grid.major.y = element_line(colour="grey60", linetype="dashed")) +
-  ggtitle("Average velo of four pitch types")
+  scale_color_discrete(name = "Pitch Type", breaks = c("CH", "CU", "FF", "SL"), labels = c("Change-Up", "Curveball", "Four-Seam FB", "Slider"))+
+  xlab("Average release velolcity (mph)")+
+  ylab("Team") +
+  ggtitle("Average velocity of four pitch types")
 
 
 ## Avg Fastball Velocity by Inning
@@ -101,8 +106,24 @@ pitch_data %>%
   ggtitle("Average Curveball velo by inning")
 
 
+
+#economist theme
+
+pitch_data %>%
+  filter(pitch_type %in% c("FF", "FT", "FI")) %>%
+  group_by(inning) %>%
+  summarize("Average Velocity (mph)" = mean(release_speed)) %>%
+  ggplot(aes(x = inning, y = `Average Velocity (mph)`)) +
+  geom_point(size = 3) + 
+  theme_economist() +
+  scale_x_continuous(breaks = 1:12, limits = c(1,12)) +
+  scale_y_continuous(breaks = 90:100) +
+  ggtitle("Average Fastball velo by inning")
+
+#pitchtypes by team
 team_pitch_avg <- pitch_data %>%
   filter(pitch_type %in% c("CU", "FF", "SL", "CH")) %>%
-group_by(mlb_team, pitch_type) %>%
+  group_by(mlb_team, pitch_type) %>%
   summarize("avg_velo" = mean(release_speed))
+
 
