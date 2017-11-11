@@ -43,8 +43,11 @@ pitch_data <-rbind(pitch_data, pitch_data_2)
 pitch_data <- read.csv("pitch_data.csv")
 
 # Add player ids to add team key
+master_id <- read.csv("master_ids.csv") # http://crunchtimebaseball.com/baseball_map.html
 
-player_ids <- read.csv("player_ids.csv")
+player_ids <- master_id %>%
+  select(mlb_id, mlb_name, mlb_team)
 
 pitch_data <- left_join(pitch_data, player_ids, by = c("pitcher" = "mlb_id"))
+
 
