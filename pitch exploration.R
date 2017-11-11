@@ -79,14 +79,28 @@ pitch_data %>%
 pitch_data %>%
   filter(pitch_type %in% c("FF", "FT", "FI")) %>%
   group_by(inning) %>%
-  summarize("avg_velo" = mean(release_speed)) %>%
-  ggplot(aes(x = inning, y = avg_velo)) +
-  geom_point(size=3) + 
+  summarize("Average Velocity (mph)" = mean(release_speed)) %>%
+  ggplot(aes(x = inning, y = `Average Velocity (mph)`)) +
+  geom_point(size = 3) + 
   theme_light() +
   theme(panel.grid.major.y = element_line(colour="grey60", linetype="dashed")) +
-  xlim(0,15) +
+  scale_x_continuous(breaks = 1:12, limits = c(1,12)) +
+  scale_y_continuous(breaks = 91:97) +
   ggtitle("Average Fastball velo by inning")
   
+## Avg Curveball velo by inning
+pitch_data %>%
+  filter(pitch_type == "CU") %>%
+  group_by(inning) %>%
+  summarize("Average Velocity (mph)" = mean(release_speed)) %>%
+  ggplot(aes(x = inning, y = `Average Velocity (mph)`)) +
+  geom_point(size = 3) + 
+  theme_light() +
+  theme(panel.grid.major.y = element_line(colour="grey60", linetype="dashed")) +
+  scale_x_continuous(breaks = 1:12, limits = c(1,12)) +
+  ggtitle("Average Curveball velo by inning")
+
+
 team_pitch_avg <- pitch_data %>%
   filter(pitch_type %in% c("CU", "FF", "SL", "CH")) %>%
 group_by(mlb_team, pitch_type) %>%
